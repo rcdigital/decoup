@@ -1,43 +1,21 @@
 /*** @jsx React.DOM */
 
 var React = require('react');
-var DataStore = require('../stores/DataStore');
-var ActionCreator = require('../actions/DataActionCreators');
+var Router = require('react-router-component');
+var CostsInsertions = React.createFactory(require('./costs/CostsInsertions'));
+var Template = React.createFactory(require('./Template'));
+
+var Locations = Router.Locations;
+var Location = Router.Location;
 
 var App = React.createClass({
-
-  _onChange: function() {
-    this.setState(DataStore.getAll());
-  },
-
-  _onButtonClick: function(e) {
-    var newTitle = prompt('Enter new title:');
-    if (newTitle) {
-      ActionCreator.updateTitle(newTitle);
-    }
-  },
-
-  getInitialState: function() {
-    var data = DataStore.getAll();
-    return {
-      title: data.title || "decoup"
-    }
-  },
-
-  componentDidMount: function() {
-    DataStore.addChangeListener(this._onChange);
-  },
-
-  componentWillUnmount: function() {
-    DataStore.removeChangeListener(this._onChange);
-  },
-
   render: function() {
     return (
-      <div>
-        <h1>Hello, welcome to {this.state.title}!</h1>
-        <button onClick={this._onButtonClick}>Update Title</button>
-      </div>
+        <Template>
+            <Locations>
+                <Location path = "/" handler = {CostsInsertions} />
+            </Locations>
+        </Template>
     );
   }
 

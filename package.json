@@ -12,9 +12,11 @@
     "reactify": "^0.14.0",
     "flux": "^2.0.1"
   },
-
   "scripts": {
     "start": "gulp build && open dist/index.html && gulp watch",
     "build": "gulp"
+  },
+  "dependencies": {
+    "react-router-component": "git+https://github.com/STRML/react-router-component.git#react-0.12"
   }
 }
