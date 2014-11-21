@@ -1,8 +1,7 @@
-/*** @jsx React.DOM */
-
 var React = require('react');
 var Router = require('react-router-component');
-var CostsInsertions = React.createFactory(require('./costs/CostsInsertions'));
+var CostsInteractions = React.createFactory(require('./costs/CostsInteractions'));
+var CostsList = React.createFactory(require('./costs/CostsList'));
 var Template = React.createFactory(require('./Template'));
 
 var Locations = Router.Locations;
@@ -13,7 +12,8 @@ var App = React.createClass({
     return (
         <Template>
             <Locations>
-                <Location path = "/" handler = {CostsInsertions} />
+                <Location path = "/" handler = {CostsInteractions} />
+                <Location path = "/custos" handler = {CostsList} />
             </Locations>
         </Template>
     );

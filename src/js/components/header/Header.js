@@ -1,10 +1,10 @@
 var React = require('react');
 
-var Header = React.CreateClass({
+var Header = React.createClass({
     render: function () {
         return (
             <nav className="navbar navbar-default navbar-fixed-top">
-                {this.props.children}
+                <h2>{this.props.pageName}<h2>
             </nav>
         );
     }
