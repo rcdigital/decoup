@@ -2,12 +2,12 @@ var React = require('react');
 var Header = React.createFactory(require('../header/Header'));
 var Link = require('react-router-component').Link;
 
-var CostsInteractions = React.createClass({
+var CostItem = React.createClass({
     render: function () {
         return (
-          null
+          <div className="row"></div>
         );
     }
 });
 
-module.exports = CostsInteractions;
+module.exports = CostItem;

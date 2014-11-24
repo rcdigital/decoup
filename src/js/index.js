@@ -3,4 +3,4 @@
 var React = require('react'),
     App = require('./components/app');
 
-React.renderComponent(<App />, document.getElementById('main'));
+React.render(<App />, document.getElementById('main'));

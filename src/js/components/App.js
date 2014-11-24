@@ -1,6 +1,6 @@
 var React = require('react');
 var Router = require('react-router-component');
-var CostsInteractions = React.createFactory(require('./costs/CostsInteractions'));
+var Home = React.createFactory(require('./Home'));
 var CostsList = React.createFactory(require('./costs/CostsList'));
 var Template = React.createFactory(require('./Template'));
 
@@ -12,7 +12,7 @@ var App = React.createClass({
     return (
         <Template>
             <Locations>
-                <Location path = "/" handler = {CostsInteractions} />
+                <Location path = "/" handler = {Home} />
                 <Location path = "/custos" handler = {CostsList} />
             </Locations>
         </Template>
