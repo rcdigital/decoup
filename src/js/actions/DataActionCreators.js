@@ -9,6 +9,8 @@ module.exports = {
       type: Constants.ActionTypes.UPDATE_TITLE,
       text: text
     });
-  }
+  },
+
+  insertItem: function () {}
 
 };

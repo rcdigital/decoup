@@ -1,5 +1,6 @@
 var React = require('react');
 var Header = React.createFactory(require('../header/Header'));
+var CostItem = React.createFactory(require('./CostItem'));
 var Link = require('react-router-component').Link;
 
 var CostsList = React.createClass({
@@ -17,7 +18,9 @@ var CostsList = React.createClass({
               </div>
             </div>
           </Header>
-          <section className=""></section>
+          <section className="row">
+              <CostItem />
+          </section>
         </section>
       );
     }

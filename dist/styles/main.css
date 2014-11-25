@@ -4,3 +4,5 @@
 .menu-structure .header-option-button{margin-right:10px;float:right}
 .options-container{padding-top:70px;margin-top:20px}
 .menu-link{display:block;margin-bottom:20px}
+.no-right-padding{padding-right:0!important}
+.no-left-padding{padding-left:0!important}

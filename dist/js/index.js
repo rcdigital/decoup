@@ -20090,7 +20090,7 @@ var Home = React.createClass({displayName: 'Home',
 
 module.exports = Home;
 
-},{"./header/Header":321,"react":316,"react-router-component":2}],318:[function(require,module,exports){
+},{"./header/Header":322,"react":316,"react-router-component":2}],318:[function(require,module,exports){
 var React = require('react');
 
 
@@ -20132,9 +20132,50 @@ var App = React.createClass({displayName: 'App',
 
 module.exports = App;
 
-},{"./Home":317,"./Template":318,"./costs/CostsList":320,"react":316,"react-router-component":2}],320:[function(require,module,exports){
+},{"./Home":317,"./Template":318,"./costs/CostsList":321,"react":316,"react-router-component":2}],320:[function(require,module,exports){
 var React = require('react');
 var Header = React.createFactory(require('../header/Header'));
+var Link = require('react-router-component').Link;
+
+var CostItem = React.createClass({displayName: 'CostItem',
+    render: function () {
+        return (
+          React.createElement("div", {className: "col-md-9 col-md-offset-1"}, 
+            React.createElement("form", {className: "form-horizontal", role: "form"}, 
+              React.createElement("div", {className: "row"}, 
+                React.createElement("div", {className: "col-xs-6  no-left-padding"}, 
+                    React.createElement("label", {className: "sr-only"}, "Area:"), 
+                    React.createElement("input", {type: "text", name: "area", className: "form-control input-normal", placeholder: "Area"})
+                ), 
+
+                React.createElement("div", {className: "col-xs-2 no-left-padding"}, 
+                    React.createElement("label", {className: "sr-only"}, "Maior Custo:"), 
+                    React.createElement("input", {type: "text", name: "highcost", className: "form-control input-normal", placeholder: "Maior Custo"})
+                ), 
+
+                React.createElement("div", {className: "col-xs-2 no-left-padding"}, 
+                    React.createElement("label", {className: "sr-only"}, "Menor Custo:"), 
+                    React.createElement("input", {type: "text", name: "lowercost", className: "form-control input-normal", placeholder: "Menor Custo"})
+                ), 
+
+                React.createElement("div", {className: "col-xs-2 btn-group  no-left-padding"}, 
+                  React.createElement("button", {type: "submit", className: "btn btn-success input-normal glyphicon glyphicon-ok", title: "Salvar"}), 
+                  React.createElement("button", {type: "button", className: "btn btn-danger input-normal glyphicon glyphicon-remove", title: "Cancelar"})
+                )
+
+              )
+            )
+          )
+        );
+    }
+});
+
+module.exports = CostItem;
+
+},{"../header/Header":322,"react":316,"react-router-component":2}],321:[function(require,module,exports){
+var React = require('react');
+var Header = React.createFactory(require('../header/Header'));
+var CostItem = React.createFactory(require('./CostItem'));
 var Link = require('react-router-component').Link;
 
 var CostsList = React.createClass({displayName: 'CostsList',
@@ -20152,7 +20193,9 @@ var CostsList = React.createClass({displayName: 'CostsList',
               )
             )
           ), 
-          React.createElement("section", {className: ""})
+          React.createElement("section", {className: "row"}, 
+              React.createElement(CostItem, null)
+          )
         )
       );
     }
@@ -20160,7 +20203,7 @@ var CostsList = React.createClass({displayName: 'CostsList',
 
 module.exports = CostsList;
 
-},{"../header/Header":321,"react":316,"react-router-component":2}],321:[function(require,module,exports){
+},{"../header/Header":322,"./CostItem":320,"react":316,"react-router-component":2}],322:[function(require,module,exports){
 'use strict';
 var React = require('react');
 
@@ -20176,7 +20219,7 @@ var Header = React.createClass({displayName: 'Header',
 
 module.exports = Header;
 
-},{"react":316}],322:[function(require,module,exports){
+},{"react":316}],323:[function(require,module,exports){
 /*** @jsx React.DOM */
 
 var React = require('react'),
@@ -20184,4 +20227,4 @@ var React = require('react'),
 
 React.render(React.createElement(App, null), document.getElementById('main'));
 
-},{"./components/app":319,"react":316}]},{},[322])
+},{"./components/app":319,"react":316}]},{},[323])
