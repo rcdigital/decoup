@@ -7,7 +7,7 @@ var AddCost = React.createClass({
     },
     render: function () {
       return (
-          <button className="btn btn-info header-option-button">Adicionar</button>
+          <button onclick = {this.handleClick} className="btn btn-info header-option-button">Adicionar</button>
       );
     }
 });

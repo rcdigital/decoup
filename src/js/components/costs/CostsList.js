@@ -3,6 +3,17 @@ var Header = React.createFactory(require('../header/Header'));
 var CostItem = React.createFactory(require('./CostItem'));
 var Link = require('react-router-component').Link;
 
+var areas = [];
+
+for (var i=1; i < 10; i++) {
+	areas.push({
+		'id':  i,
+		'name': 'area ' + i,
+		'highCost': i * 2,
+		'lowCost': i
+	});
+}
+
 var CostsList = React.createClass({
     render: function () {
       return (
@@ -19,7 +30,7 @@ var CostsList = React.createClass({
             </div>
           </Header>
           <section className="row">
-              <CostItem />
+              <CostItem areas = {areas} />
           </section>
         </section>
       );

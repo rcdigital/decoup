@@ -1,6 +1,4 @@
-/*** @jsx React.DOM */
-
 var React = require('react'),
     App = require('./components/app');
 
-React.render(<App />, document.getElementById('main'));
+React.render(React.createFactory(App)(),  document.getElementById('main'));

@@ -20090,7 +20090,7 @@ var Home = React.createClass({displayName: 'Home',
 
 module.exports = Home;
 
-},{"./header/Header":322,"react":316,"react-router-component":2}],318:[function(require,module,exports){
+},{"./header/Header":326,"react":316,"react-router-component":2}],318:[function(require,module,exports){
 var React = require('react');
 
 
@@ -20132,39 +20132,46 @@ var App = React.createClass({displayName: 'App',
 
 module.exports = App;
 
-},{"./Home":317,"./Template":318,"./costs/CostsList":321,"react":316,"react-router-component":2}],320:[function(require,module,exports){
+},{"./Home":317,"./Template":318,"./costs/CostsList":322,"react":316,"react-router-component":2}],320:[function(require,module,exports){
+'use strict';
 var React = require('react');
-var Header = React.createFactory(require('../header/Header'));
-var Link = require('react-router-component').Link;
+var InputForm = React.createFactory(require('./InputForm'));
+var InputLabel = React.createFactory(require('./InputLabel'));
+
+var CostContainer = React.createClass({displayName: 'CostContainer',
+    render: function () {
+        return (
+          React.createElement("section", {className: "col-md-9 col-md-offset-1"}, 
+                React.createElement("div", null, 
+                  React.createElement(InputLabel, {area: this.props.area}), 
+                  React.createElement(InputForm, {area: this.props.area})
+                )
+          )
+        );
+    }
+});
+
+module.exports = CostContainer;
+
+},{"./InputForm":324,"./InputLabel":325,"react":316}],321:[function(require,module,exports){
+'use strict';
+var React = require('react');
+var CostContainer = React.createFactory(require('./CostContainer'));
+
+var inputs = [];
 
 var CostItem = React.createClass({displayName: 'CostItem',
     render: function () {
+        var rows = [];
+        this.props.areas.forEach(function (area) {
+          rows.push(React.createElement(CostContainer, {area: area}));
+        });
+
+        rows.push(React.createElement(CostContainer, null));
+
         return (
-          React.createElement("div", {className: "col-md-9 col-md-offset-1"}, 
-            React.createElement("form", {className: "form-horizontal", role: "form"}, 
-              React.createElement("div", {className: "row"}, 
-                React.createElement("div", {className: "col-xs-6  no-left-padding"}, 
-                    React.createElement("label", {className: "sr-only"}, "Area:"), 
-                    React.createElement("input", {type: "text", name: "area", className: "form-control input-normal", placeholder: "Area"})
-                ), 
-
-                React.createElement("div", {className: "col-xs-2 no-left-padding"}, 
-                    React.createElement("label", {className: "sr-only"}, "Maior Custo:"), 
-                    React.createElement("input", {type: "text", name: "highcost", className: "form-control input-normal", placeholder: "Maior Custo"})
-                ), 
-
-                React.createElement("div", {className: "col-xs-2 no-left-padding"}, 
-                    React.createElement("label", {className: "sr-only"}, "Menor Custo:"), 
-                    React.createElement("input", {type: "text", name: "lowercost", className: "form-control input-normal", placeholder: "Menor Custo"})
-                ), 
-
-                React.createElement("div", {className: "col-xs-2 btn-group  no-left-padding"}, 
-                  React.createElement("button", {type: "submit", className: "btn btn-success input-normal glyphicon glyphicon-ok", title: "Salvar"}), 
-                  React.createElement("button", {type: "button", className: "btn btn-danger input-normal glyphicon glyphicon-remove", title: "Cancelar"})
-                )
-
-              )
-            )
+          React.createElement("section", {className: "container cost-list"}, 
+          rows
           )
         );
     }
@@ -20172,11 +20179,22 @@ var CostItem = React.createClass({displayName: 'CostItem',
 
 module.exports = CostItem;
 
-},{"../header/Header":322,"react":316,"react-router-component":2}],321:[function(require,module,exports){
+},{"./CostContainer":320,"react":316}],322:[function(require,module,exports){
 var React = require('react');
 var Header = React.createFactory(require('../header/Header'));
 var CostItem = React.createFactory(require('./CostItem'));
 var Link = require('react-router-component').Link;
+
+var areas = [];
+
+for (var i=1; i < 10; i++) {
+	areas.push({
+		'id':  i,
+		'name': 'area ' + i,
+		'highCost': i * 2,
+		'lowCost': i
+	});
+}
 
 var CostsList = React.createClass({displayName: 'CostsList',
     render: function () {
@@ -20194,7 +20212,7 @@ var CostsList = React.createClass({displayName: 'CostsList',
             )
           ), 
           React.createElement("section", {className: "row"}, 
-              React.createElement(CostItem, null)
+              React.createElement(CostItem, {areas: areas})
           )
         )
       );
@@ -20203,7 +20221,96 @@ var CostsList = React.createClass({displayName: 'CostsList',
 
 module.exports = CostsList;
 
-},{"../header/Header":322,"./CostItem":320,"react":316,"react-router-component":2}],322:[function(require,module,exports){
+},{"../header/Header":326,"./CostItem":321,"react":316,"react-router-component":2}],323:[function(require,module,exports){
+'use strict';
+var React = require('react');
+var CostsMixin = {
+    propTypes: {
+      name: React.PropTypes.string,
+      highCost: React.PropTypes.number,
+      lowCost: React.PropTypes.number
+    },
+
+    getDefaultProps: function () {
+      return {
+        area: {
+          name: '',
+          highCost: '',
+          lowCost: ''
+        }
+      };
+    }
+};
+
+module.exports = CostsMixin;
+
+},{"react":316}],324:[function(require,module,exports){
+'use strict';
+var React = require('react');
+var CostsMixin = require('./CostsMixin');
+
+var InputForm = React.createClass({displayName: 'InputForm',
+    mixins: [CostsMixin],
+    componentWillMount: function () {
+        console.log(this.props.area);
+    },
+    render: function () {
+        return (
+            React.createElement("form", {className: "form-horizontal", role: "form"}, 
+              React.createElement("div", {className: "row"}, 
+                React.createElement("div", {className: "col-xs-6  no-left-padding"}, 
+                    React.createElement("label", {className: "sr-only"}, "Area:"), 
+                    React.createElement("input", {type: "text", refs: "area", value: this.props.area.name, name: "area", className: "form-control input-normal", placeholder: "Area"})
+                ), 
+
+                React.createElement("div", {className: "col-xs-2 no-left-padding"}, 
+                    React.createElement("label", {className: "sr-only"}, "Maior Custo:"), 
+                    React.createElement("input", {type: "text", value: this.props.area.highCost, name: "highcost", className: "form-control input-normal", placeholder: "Maior Custo"})
+                ), 
+
+                React.createElement("div", {className: "col-xs-2 no-left-padding"}, 
+                    React.createElement("label", {className: "sr-only"}, "Menor Custo:"), 
+                    React.createElement("input", {type: "text", value: this.props.area.lowCost, name: "lowercost", className: "form-control input-normal", placeholder: "Menor Custo"})
+                ), 
+
+                React.createElement("div", {className: "col-xs-2 btn-group  no-left-padding"}, 
+                  React.createElement("button", {type: "submit", className: "btn btn-success input-normal glyphicon glyphicon-ok", title: "Salvar"}), 
+                  React.createElement("button", {type: "button", className: "btn btn-danger input-normal glyphicon glyphicon-remove", title: "Cancelar"})
+                )
+
+              )
+            )
+        );
+    }
+});
+
+module.exports = InputForm;
+
+},{"./CostsMixin":323,"react":316}],325:[function(require,module,exports){
+'use strict';
+var React = require('react');
+var CostsMixin = require('./CostsMixin');
+
+var InputLabel = React.createClass({displayName: 'InputLabel',
+    mixins: [CostsMixin],
+    render: function () {
+        return (
+            React.createElement("div", {className: "row"}, 
+              React.createElement("span", {className: "col-xs-6 no-left-padding"}, this.props.area.name), 
+              React.createElement("span", {className: "col-xs-2 no-left-padding"}, this.props.area.highCost), 
+              React.createElement("span", {className: "col-xs-2 no-left-padding"}, this.props.area.lowCost), 
+
+              React.createElement("div", {className: "col-xs-2 btn-group  no-left-padding"}, 
+                React.createElement("button", {type: "submit", className: "btn btn-default input-normal glyphicon glyphicon-pencil", title: "editar"}, " Editar")
+              )
+            )
+        );
+    }
+});
+
+module.exports = InputLabel;
+
+},{"./CostsMixin":323,"react":316}],326:[function(require,module,exports){
 'use strict';
 var React = require('react');
 
@@ -20219,12 +20326,10 @@ var Header = React.createClass({displayName: 'Header',
 
 module.exports = Header;
 
-},{"react":316}],323:[function(require,module,exports){
-/*** @jsx React.DOM */
-
+},{"react":316}],327:[function(require,module,exports){
 var React = require('react'),
     App = require('./components/app');
 
-React.render(React.createElement(App, null), document.getElementById('main'));
+React.render(React.createFactory(App)(),  document.getElementById('main'));
 
-},{"./components/app":319,"react":316}]},{},[323])
+},{"./components/app":319,"react":316}]},{},[327])
