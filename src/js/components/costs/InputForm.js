@@ -4,12 +4,9 @@ var CostsMixin = require('./CostsMixin');
 
 var InputForm = React.createClass({
     mixins: [CostsMixin],
-    componentWillMount: function () {
-        console.log(this.props.area);
-    },
     render: function () {
         return (
-            <form className="form-horizontal" role="form">
+            <form className={this.state.rowStyle + " form-horizontal item-row"} role="form">
               <div className ="row">
                 <div className="col-xs-6  no-left-padding">
                     <label className="sr-only">Area:</label>

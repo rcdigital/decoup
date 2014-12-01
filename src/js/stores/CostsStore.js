@@ -7,18 +7,29 @@ var _data = {
   title: null
 };
 
+var _areas = [];
+
+for (var i=1; i < 10; i++) {
+	_areas.push({
+		'id':  i,
+		'name': 'area ' + i,
+		'highCost': i * 2,
+		'lowCost': i
+	});
+}
+
+
 // add private functions to modify data
 function update(title) {
   _data.title = title;
 }
 
-function appendData(container) {}
 
 var CostsStore = merge(EventEmitter.prototype, {
 
   // public methods used by Controller-View to operate on data
   getAll: function() {
-    return _data;
+    return _areas;
   },
 
 
@@ -47,7 +58,7 @@ var CostsStore = merge(EventEmitter.prototype, {
         // For details, see: http://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#why-we-need-a-dispatcher
         if (text !== '') {
           update(text);
-          DataStore.emitChange();
+          CostsStore.emitChange();
         }
         break;
         case CostsConstants.APPEND_ITEM:
@@ -59,4 +70,4 @@ var CostsStore = merge(EventEmitter.prototype, {
 
 });
 
-module.exports = DataStore;
+module.exports = CostsStore;

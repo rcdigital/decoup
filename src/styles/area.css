@@ -1,2 +1,3 @@
 .no-right-padding { padding-right: 0 !important; }
 .no-left-padding { padding-left: 0 !important; }
+.js-hidden { display: none; }

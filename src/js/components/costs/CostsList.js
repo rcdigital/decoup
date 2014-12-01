@@ -1,20 +1,22 @@
+'use strict';
+
 var React = require('react');
 var Header = React.createFactory(require('../header/Header'));
+var CostsStore = require('../../stores/CostsStore');
 var CostItem = React.createFactory(require('./CostItem'));
 var Link = require('react-router-component').Link;
 
-var areas = [];
-
-for (var i=1; i < 10; i++) {
-	areas.push({
-		'id':  i,
-		'name': 'area ' + i,
-		'highCost': i * 2,
-		'lowCost': i
-	});
+function getAreaList() {
+  return { areas: CostsStore.getAll() };
 }
 
 var CostsList = React.createClass({
+    getInitialState: function () {
+      return getAreaList();
+    },
+    addItem: function (e) {
+      document.getElementById('row-stage').appendChild(<CostItem />);
+    },
     render: function () {
       return (
         <section className = "container options-container">
@@ -25,12 +27,12 @@ var CostsList = React.createClass({
               </div>
               <h2 className="col-md-8 main-menu">Custo x Hora</h2>
               <div className="col-md-2">
-                <button className="btn btn-info header-option-button">Adicionar</button>
+                <button onClick={this.addItem} className="btn btn-info header-option-button">Adicionar</button>
               </div>
             </div>
           </Header>
-          <section className="row">
-              <CostItem areas = {areas} />
+          <section id="row-stage" className="table table-hover">
+              <CostItem areas = {this.state.areas} />
           </section>
         </section>
       );
