@@ -2,10 +2,10 @@
 var React = require('react');
 var rowStyle = '';
 var CostsMixin = {
-    getInitialState: function () {
-      return { rowStyle: ''}
-    },
 
+    getInitialState: function () {
+      return { rowStyle: ''};
+    },
     propTypes: {
       name: React.PropTypes.string,
       highCost: React.PropTypes.number,
@@ -18,7 +18,10 @@ var CostsMixin = {
           name: '',
           highCost: '',
           lowCost: ''
-        }
+        },
+
+        onChange: function (){},
+        onRemove: function () {}
       };
     },
 
@@ -28,6 +31,7 @@ var CostsMixin = {
           this.setState({rowStyle : 'js-hidden'});
         }
     }
+
 };
 
 module.exports = CostsMixin;

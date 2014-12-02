@@ -1,13 +1,12 @@
 var React = require('react');
-var DataActionCreators = require('../actions.DataActionCreators');
 
 var AddCost = React.createClass({
-    handleClick: function () {
-
+    addItem: function (e) {
+      this.props.onClick(e);
     },
     render: function () {
       return (
-          <button onclick = {this.handleClick} className="btn btn-info header-option-button">Adicionar</button>
+          <button onClick = {this.addItem} className="btn btn-info header-option-button">Adicionar</button>
       );
     }
 });

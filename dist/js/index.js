@@ -20849,12 +20849,28 @@ var App = React.createClass({displayName: 'App',
 module.exports = App;
 
 },{"./Home":323,"./Template":324,"./costs/CostsList":328,"react":322,"react-router-component":6}],326:[function(require,module,exports){
+var React = require('react');
+
+var AddCost = React.createClass({displayName: 'AddCost',
+    addItem: function (e) {
+      this.props.onClick(e);
+    },
+    render: function () {
+      return (
+          React.createElement("button", {onClick: this.addItem, className: "btn btn-info header-option-button"}, "Adicionar")
+      );
+    }
+});
+
+module.exports = AddCost;
+
+},{"react":322}],327:[function(require,module,exports){
 'use strict';
 var React = require('react');
 var InputForm = React.createFactory(require('./InputForm'));
 var InputLabel = React.createFactory(require('./InputLabel'));
 
-var CostContainer = React.createClass({displayName: 'CostContainer',
+var CostItem = React.createClass({displayName: 'CostItem',
     render: function () {
         return (
           React.createElement("section", {className: "col-md-9 col-md-offset-1"}, 
@@ -20867,53 +20883,35 @@ var CostContainer = React.createClass({displayName: 'CostContainer',
     }
 });
 
-module.exports = CostContainer;
-
-},{"./InputForm":330,"./InputLabel":331,"react":322}],327:[function(require,module,exports){
-'use strict';
-var React = require('react');
-var CostContainer = React.createFactory(require('./CostContainer'));
-
-var inputs = [];
-
-var CostItem = React.createClass({displayName: 'CostItem',
-    render: function () {
-        var rows = [];
-        this.props.areas.forEach(function (area) {
-          rows.push(React.createElement(CostContainer, {area: area}));
-        });
-
-        rows.push(React.createElement(CostContainer, null));
-
-        return (
-          React.createElement("section", {className: "container cost-list"}, 
-          rows
-          )
-        );
-    }
-});
-
 module.exports = CostItem;
 
-},{"./CostContainer":326,"react":322}],328:[function(require,module,exports){
+},{"./InputForm":330,"./InputLabel":331,"react":322}],328:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
 var Header = React.createFactory(require('../header/Header'));
 var CostsStore = require('../../stores/CostsStore');
 var CostItem = React.createFactory(require('./CostItem'));
+var AddCost = React.createFactory(require('./AddCost'));
 var Link = require('react-router-component').Link;
 
-function getAreaList() {
-  return { areas: CostsStore.getAll() };
-}
 
 var CostsList = React.createClass({displayName: 'CostsList',
     getInitialState: function () {
-      return getAreaList();
+      return this.bindColumns()
     },
-    addItem: function (e) {
-      document.getElementById('row-stage').appendChild(React.createElement(CostItem, null));
+    bindColumns: function () {
+      var items = CostsStore.getAll();
+      var rows = [];
+      for (var x=0, l = items.length; x < l; x++) {
+        rows.push(React.createElement(CostItem, {area: items[x]}));
+      }
+
+      return {items: rows};
+    },
+    addItem: function () {
+      var newItems = this.state.items.concat([React.createElement(CostItem, null)]);
+      this.setState({items: newItems});
     },
     render: function () {
       return (
@@ -20924,13 +20922,11 @@ var CostsList = React.createClass({displayName: 'CostsList',
                 React.createElement(Link, {className: "btn btn-default header-link-default", href: "/"}, "voltar")
               ), 
               React.createElement("h2", {className: "col-md-8 main-menu"}, "Custo x Hora"), 
-              React.createElement("div", {className: "col-md-2"}, 
-                React.createElement("button", {onClick: this.addItem, className: "btn btn-info header-option-button"}, "Adicionar")
-              )
+              React.createElement(AddCost, {onClick: this.addItem})
             )
           ), 
           React.createElement("section", {id: "row-stage", className: "table table-hover"}, 
-              React.createElement(CostItem, {areas: this.state.areas})
+            this.state.items
           )
         )
       );
@@ -20939,15 +20935,15 @@ var CostsList = React.createClass({displayName: 'CostsList',
 
 module.exports = CostsList;
 
-},{"../../stores/CostsStore":336,"../header/Header":332,"./CostItem":327,"react":322,"react-router-component":6}],329:[function(require,module,exports){
+},{"../../stores/CostsStore":336,"../header/Header":332,"./AddCost":326,"./CostItem":327,"react":322,"react-router-component":6}],329:[function(require,module,exports){
 'use strict';
 var React = require('react');
 var rowStyle = '';
 var CostsMixin = {
-    getInitialState: function () {
-      return { rowStyle: ''}
-    },
 
+    getInitialState: function () {
+      return { rowStyle: ''};
+    },
     propTypes: {
       name: React.PropTypes.string,
       highCost: React.PropTypes.number,
@@ -20960,7 +20956,10 @@ var CostsMixin = {
           name: '',
           highCost: '',
           lowCost: ''
-        }
+        },
+
+        onChange: function (){},
+        onRemove: function () {}
       };
     },
 
@@ -20970,6 +20969,7 @@ var CostsMixin = {
           this.setState({rowStyle : 'js-hidden'});
         }
     }
+
 };
 
 module.exports = CostsMixin;

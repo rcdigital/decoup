@@ -1,21 +1,16 @@
 'use strict';
 var React = require('react');
-var CostContainer = React.createFactory(require('./CostContainer'));
-
-var inputs = [];
+var InputForm = React.createFactory(require('./InputForm'));
+var InputLabel = React.createFactory(require('./InputLabel'));
 
 var CostItem = React.createClass({
     render: function () {
-        var rows = [];
-        this.props.areas.forEach(function (area) {
-          rows.push(<CostContainer area={area} />);
-        });
-
-        rows.push(<CostContainer />);
-
         return (
-          <section className="container cost-list">
-          {rows}
+          <section className="col-md-9 col-md-offset-1">
+                <div>
+                  <InputLabel area= {this.props.area} />
+                  <InputForm area= {this.props.area} />
+                </div>
           </section>
         );
     }

@@ -4,18 +4,26 @@ var React = require('react');
 var Header = React.createFactory(require('../header/Header'));
 var CostsStore = require('../../stores/CostsStore');
 var CostItem = React.createFactory(require('./CostItem'));
+var AddCost = React.createFactory(require('./AddCost'));
 var Link = require('react-router-component').Link;
 
-function getAreaList() {
-  return { areas: CostsStore.getAll() };
-}
 
 var CostsList = React.createClass({
     getInitialState: function () {
-      return getAreaList();
+      return this.bindColumns()
     },
-    addItem: function (e) {
-      document.getElementById('row-stage').appendChild(<CostItem />);
+    bindColumns: function () {
+      var items = CostsStore.getAll();
+      var rows = [];
+      for (var x=0, l = items.length; x < l; x++) {
+        rows.push(<CostItem area={items[x]} />);
+      }
+
+      return {items: rows};
+    },
+    addItem: function () {
+      var newItems = this.state.items.concat([<CostItem />]);
+      this.setState({items: newItems});
     },
     render: function () {
       return (
@@ -26,13 +34,11 @@ var CostsList = React.createClass({
                 <Link className="btn btn-default header-link-default"  href="/">voltar</Link>
               </div>
               <h2 className="col-md-8 main-menu">Custo x Hora</h2>
-              <div className="col-md-2">
-                <button onClick={this.addItem} className="btn btn-info header-option-button">Adicionar</button>
-              </div>
+              <AddCost onClick={this.addItem} />
             </div>
           </Header>
           <section id="row-stage" className="table table-hover">
-              <CostItem areas = {this.state.areas} />
+            {this.state.items}
           </section>
         </section>
       );
