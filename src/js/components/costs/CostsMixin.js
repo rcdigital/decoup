@@ -1,36 +1,48 @@
 'use strict';
 var React = require('react');
-var rowStyle = '';
-var CostsMixin = {
+var CostsMixin = function () {
+    return {
+      getInitialState: function () {
+        return {rowStyle: false};
+      },
 
-    getInitialState: function () {
-      return { rowStyle: ''};
-    },
-    propTypes: {
-      name: React.PropTypes.string,
-      highCost: React.PropTypes.number,
-      lowCost: React.PropTypes.number
-    },
+      componentWillMount: function () {
+          console.log('test');
+          this.setState({rowStyle : false});
+          if (this.props.area.name === '' ) {
+            this.setState({rowStyle : true});
+          }
+      },
 
-    getDefaultProps: function () {
-      return {
-        area: {
-          name: '',
-          highCost: '',
-          lowCost: ''
-        },
+      shouldComponentUpdate: function () {
+        console.log('should update');
+        return true;
+      },
 
-        onChange: function (){},
-        onRemove: function () {}
-      };
-    },
+      propTypes: {
+        name: React.PropTypes.string,
+        highCost: React.PropTypes.number,
+        lowCost: React.PropTypes.number
+      },
 
-    componentWillMount: function () {
-        this.setState({rowStyle : ''});
-        if (this.props.area.name !== '' ) {
-          this.setState({rowStyle : 'js-hidden'});
-        }
-    }
+      updataData: function (index) {
+        console.log(index);
+      },
+
+      getDefaultProps: function () {
+        return {
+          area: {
+            name: '',
+            highCost: '',
+            lowCost: ''
+          },
+
+          onChange: function (){},
+          onRemove: function () {}
+        };
+      }
+
+  };
 
 };
 
