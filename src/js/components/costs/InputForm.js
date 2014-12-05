@@ -4,7 +4,7 @@ var Addons = require('react/addons').addons;
 var CostsMixin = require('./CostsMixin');
 
 var InputForm = React.createClass({
-    mixins: [CostsMixin],
+    mixins: [CostsMixin()],
     saveData : function (e) {
       e.preventDefault();
       console.log(this.props.index);
@@ -12,10 +12,11 @@ var InputForm = React.createClass({
 
     render: function () {
         var cx = Addons.classSet;
+        console.log('input form');
         var classes = cx({
           'form-horizontal': true,
           'item-row': true,
-          'js-hidden': this.state.rowStyle
+          'js-hidden': !this.state.rowStyle
         });
         return (
             <form onSubmit={this.saveData} index={this.props.area.id} className={classes} role="form">

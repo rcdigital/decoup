@@ -4,7 +4,8 @@ var Addons = require('react/addons').addons;
 var CostsMixin = require('./CostsMixin');
 
 var InputLabel = React.createClass({
-    mixins: [CostsMixin],
+    mixins: [CostsMixin()],
+
     updateHandler : function (e) {
       console.log(e);
       this.setState({rowStyle: true});
@@ -12,10 +13,11 @@ var InputLabel = React.createClass({
 
     render: function () {
         var cx = Addons.classSet;
+        console.log(!this.state.rowStyle);
         var classes = cx({
           'row': true,
           'item-row': true,
-          'js-hidden': !this.state.rowStyle
+          'js-hidden': this.state.rowStyle
         });
         return (
             <div className = {classes} >

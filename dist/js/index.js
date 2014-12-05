@@ -22607,7 +22607,6 @@ var CostsMixin = function () {
       },
 
       componentWillMount: function () {
-          console.log('test');
           this.setState({rowStyle : false});
           if (this.props.area.name === '' ) {
             this.setState({rowStyle : true});
@@ -22655,7 +22654,7 @@ var Addons = require('react/addons').addons;
 var CostsMixin = require('./CostsMixin');
 
 var InputForm = React.createClass({displayName: 'InputForm',
-    mixins: [CostsMixin],
+    mixins: [CostsMixin()],
     saveData : function (e) {
       e.preventDefault();
       console.log(this.props.index);
@@ -22663,10 +22662,11 @@ var InputForm = React.createClass({displayName: 'InputForm',
 
     render: function () {
         var cx = Addons.classSet;
+        console.log('input form');
         var classes = cx({
           'form-horizontal': true,
           'item-row': true,
-          'js-hidden': this.state.rowStyle
+          'js-hidden': !this.state.rowStyle
         });
         return (
             React.createElement("form", {onSubmit: this.saveData, index: this.props.area.id, className: classes, role: "form"}, 
@@ -22707,7 +22707,8 @@ var Addons = require('react/addons').addons;
 var CostsMixin = require('./CostsMixin');
 
 var InputLabel = React.createClass({displayName: 'InputLabel',
-    mixins: [CostsMixin],
+    mixins: [CostsMixin()],
+
     updateHandler : function (e) {
       console.log(e);
       this.setState({rowStyle: true});
@@ -22715,10 +22716,11 @@ var InputLabel = React.createClass({displayName: 'InputLabel',
 
     render: function () {
         var cx = Addons.classSet;
+        console.log(!this.state.rowStyle);
         var classes = cx({
           'row': true,
           'item-row': true,
-          'js-hidden': !this.state.rowStyle
+          'js-hidden': this.state.rowStyle
         });
         return (
             React.createElement("div", {className: classes}, 

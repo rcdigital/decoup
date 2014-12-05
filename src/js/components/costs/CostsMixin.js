@@ -7,7 +7,6 @@ var CostsMixin = function () {
       },
 
       componentWillMount: function () {
-          console.log('test');
           this.setState({rowStyle : false});
           if (this.props.area.name === '' ) {
             this.setState({rowStyle : true});
