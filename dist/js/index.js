@@ -22533,11 +22533,18 @@ var InputForm = React.createFactory(require('./InputForm'));
 var InputLabel = React.createFactory(require('./InputLabel'));
 
 var CostItem = React.createClass({displayName: 'CostItem',
+    getInitialState: function () {
+      return {rowStyle: false};
+    },
+    updateData: function (e) {
+      this.setState({rowStyle: true});
+    },
+
     render: function () {
         return (
           React.createElement("section", {className: "col-md-9 col-md-offset-1"}, 
                 React.createElement("div", null, 
-                  React.createElement(InputLabel, {area: this.props.area}), 
+                  React.createElement(InputLabel, {onClick: this.updateData, area: this.props.area}), 
                   React.createElement(InputForm, {area: this.props.area})
                 )
           )
@@ -22602,9 +22609,6 @@ module.exports = CostsList;
 var React = require('react');
 var CostsMixin = function () {
     return {
-      getInitialState: function () {
-        return {rowStyle: false};
-      },
 
       componentWillMount: function () {
           this.setState({rowStyle : false});
@@ -22613,19 +22617,10 @@ var CostsMixin = function () {
           }
       },
 
-      shouldComponentUpdate: function () {
-        console.log('should update');
-        return true;
-      },
-
       propTypes: {
         name: React.PropTypes.string,
         highCost: React.PropTypes.number,
         lowCost: React.PropTypes.number
-      },
-
-      updataData: function (index) {
-        console.log(index);
       },
 
       getDefaultProps: function () {
@@ -22634,10 +22629,7 @@ var CostsMixin = function () {
             name: '',
             highCost: '',
             lowCost: ''
-          },
-
-          onChange: function (){},
-          onRemove: function () {}
+          }
         };
       }
 
@@ -22652,9 +22644,10 @@ module.exports = CostsMixin;
 var React = require('react');
 var Addons = require('react/addons').addons;
 var CostsMixin = require('./CostsMixin');
+var PureRenderMixin = require('react').addons.PureRenderMixin;
 
 var InputForm = React.createClass({displayName: 'InputForm',
-    mixins: [CostsMixin()],
+    mixins: [CostsMixin(), PureRenderMixin],
     saveData : function (e) {
       e.preventDefault();
       console.log(this.props.index);
@@ -22703,15 +22696,16 @@ module.exports = InputForm;
 },{"./CostsMixin":345,"react":338,"react/addons":175}],347:[function(require,module,exports){
 'use strict';
 var React = require('react');
+var PureRenderMixin = require('react').addons.PureRenderMixin;
 var Addons = require('react/addons').addons;
 var CostsMixin = require('./CostsMixin');
 
 var InputLabel = React.createClass({displayName: 'InputLabel',
-    mixins: [CostsMixin()],
+    mixins: [CostsMixin(), PureRenderMixin],
 
-    updateHandler : function (e) {
+    handleUpdateColumn : function (e) {
       console.log(e);
-      this.setState({rowStyle: true});
+      this.props.onClick(e);
     },
 
     render: function () {
@@ -22729,7 +22723,7 @@ var InputLabel = React.createClass({displayName: 'InputLabel',
               React.createElement("span", {className: "col-xs-2 no-left-padding"}, this.props.area.lowCost), 
 
               React.createElement("div", {className: "col-xs-2 btn-group  no-left-padding"}, 
-                React.createElement("button", {type: "button", onClick: this.updateHandler, className: "btn btn-default input-normal glyphicon glyphicon-pencil", title: "editar"})
+                React.createElement("button", {type: "button", onClick: this.handleUpdateColumn, className: "btn btn-default input-normal glyphicon glyphicon-pencil", title: "editar"})
               )
             )
         );

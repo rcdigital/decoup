@@ -2,9 +2,6 @@
 var React = require('react');
 var CostsMixin = function () {
     return {
-      getInitialState: function () {
-        return {rowStyle: false};
-      },
 
       componentWillMount: function () {
           this.setState({rowStyle : false});
@@ -13,19 +10,10 @@ var CostsMixin = function () {
           }
       },
 
-      shouldComponentUpdate: function () {
-        console.log('should update');
-        return true;
-      },
-
       propTypes: {
         name: React.PropTypes.string,
         highCost: React.PropTypes.number,
         lowCost: React.PropTypes.number
-      },
-
-      updataData: function (index) {
-        console.log(index);
       },
 
       getDefaultProps: function () {
@@ -34,10 +22,7 @@ var CostsMixin = function () {
             name: '',
             highCost: '',
             lowCost: ''
-          },
-
-          onChange: function (){},
-          onRemove: function () {}
+          }
         };
       }
 

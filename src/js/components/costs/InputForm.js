@@ -2,9 +2,10 @@
 var React = require('react');
 var Addons = require('react/addons').addons;
 var CostsMixin = require('./CostsMixin');
+var PureRenderMixin = require('react').addons.PureRenderMixin;
 
 var InputForm = React.createClass({
-    mixins: [CostsMixin()],
+    mixins: [CostsMixin(), PureRenderMixin],
     saveData : function (e) {
       e.preventDefault();
       console.log(this.props.index);

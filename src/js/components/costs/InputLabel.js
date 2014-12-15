@@ -1,14 +1,15 @@
 'use strict';
 var React = require('react');
+var PureRenderMixin = require('react').addons.PureRenderMixin;
 var Addons = require('react/addons').addons;
 var CostsMixin = require('./CostsMixin');
 
 var InputLabel = React.createClass({
-    mixins: [CostsMixin()],
+    mixins: [CostsMixin(), PureRenderMixin],
 
-    updateHandler : function (e) {
+    handleUpdateColumn : function (e) {
       console.log(e);
-      this.setState({rowStyle: true});
+      this.props.onClick(e);
     },
 
     render: function () {
@@ -26,7 +27,7 @@ var InputLabel = React.createClass({
               <span className="col-xs-2 no-left-padding">{this.props.area.lowCost}</span>
 
               <div className="col-xs-2 btn-group  no-left-padding">
-                <button type="button" onClick = {this.updateHandler}  className="btn btn-default input-normal glyphicon glyphicon-pencil" title="editar" ></button>
+                <button type="button" onClick = {this.handleUpdateColumn}  className="btn btn-default input-normal glyphicon glyphicon-pencil" title="editar" ></button>
               </div>
             </div>
         );
