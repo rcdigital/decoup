@@ -12,9 +12,20 @@ module.exports = {
     });
   },
 
-  appendItem: function () {
+  updateArea: function(areaId, item) {
     CostsDispatcher.handleViewAction({
-      type: CostsConstants.ActionTypes.APPEND_ITEM
+      type: CostsConstants.ActionTypes.UPDATE_AREA,
+      areaId: areaId,
+      item: item
+    });
+  },
+
+  addArea: function () {
+    CostsDispatcher.handleViewAction({
+      type: CostsConstants.ActionTypes.ADD_AREA,
+      name: name,
+      highCost: highCost,
+      lowCost: lowCost
     });
   }
 

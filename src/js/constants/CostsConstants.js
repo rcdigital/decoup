@@ -6,7 +6,9 @@ module.exports = {
 
   ActionTypes: keyMirror({
     UPDATE_TITLE: null,
-    APPEND_ITEM: null,
+    ADD_AREA: null,
+    UPDATE_AREA: null,
+    DELETE_AREA: null,
     RECEIVE_DATA: null
   }),
 

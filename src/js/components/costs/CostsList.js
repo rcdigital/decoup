@@ -1,5 +1,4 @@
 'use strict';
-
 var React = require('react');
 var Header = React.createFactory(require('../header/Header'));
 var CostsStore = require('../../stores/CostsStore');
@@ -8,22 +7,15 @@ var AddCost = React.createFactory(require('./AddCost'));
 var Link = require('react-router-component').Link;
 
 
-var CostsList = React.createClass({
-    getInitialState: function () {
-      return this.bindColumns()
-    },
-    bindColumns: function () {
-      var items = CostsStore.getAll();
-      var rows = [];
-      for (var x=0, l = items.length; x < l; x++) {
-        rows.push(<CostItem area={items[x]} />);
-      }
+var items = CostItem.getAll();
+var addArea = (item) => stores.addArea(item);
 
-      return {items: rows};
+var CostsList = React.createClass({
+    addArea: function () {
+      addArea(item);
     },
-    addItem: function () {
-      var newItems = this.state.items.concat([<CostItem />]);
-      this.setState({items: newItems});
+    updateItem: function (item) {
+
     },
     render: function () {
       return (
@@ -34,11 +26,11 @@ var CostsList = React.createClass({
                 <Link className="btn btn-default header-link-default"  href="/">voltar</Link>
               </div>
               <h2 className="col-md-8 main-menu">Custo x Hora</h2>
-              <AddCost onClick={this.addItem} />
+              <AddCost onClick={this.addArea} />
             </div>
           </Header>
           <section id="row-stage" className="table table-hover">
-            {this.state.items}
+            <CostItem area={items[x]} />
           </section>
         </section>
       );

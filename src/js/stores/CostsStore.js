@@ -1,72 +1,89 @@
+'use strict';
 var CostsDispatcher = require('../dispatchers/CostsDispatcher');
 var EventEmitter = require('events').EventEmitter;
-var CostsConstants = require('../constants/CostsConstants');
 var merge = require('react/lib/merge');
+
+var CostsConstants = require('../constants/CostConstants');
+var CHANGE_EVENT = 'change';
 
 var _data = {
   title: null
 };
 
 var _areas = [];
-
-for (var i=1; i < 10; i++) {
-	_areas.push({
-		'id':  i,
-		'name': 'area ' + i,
-		'highCost': i * 2,
-		'lowCost': i
-	});
-}
-
+var id = 1;
 
 // add private functions to modify data
-function update(title) {
+function _updateTitle(title) {
   _data.title = title;
 }
 
+function _addArea(name, highCost, lowCost) {
+  var item = { id : ++id, name: name, lowCost: lowCost, highCost: highCost};
+  _areas.push(item);
+}
 
-var CostsStore = merge(EventEmitter.prototype, {
+function _updateArea(item) {
+  _areas[item.id] = item;
+}
 
-  // public methods used by Controller-View to operate on data
-  getAll: function() {
-    return _areas;
+function _removeArea(areaId) {
+  delete _areas[areaId];
+}
+
+var CostStore = merge(EventEmitter.prototype, {
+	emitChange: function () {
+		this.emit(CHANGE_EVENT);
+	},
+
+	addChangeListener: function (callback) {
+		this.on(CHANGE_EVENT, callback);
+	},
+
+	removeChangeListener: function (callback) {
+		this.removeListener(CHANGE_EVENT, callback);
+	},
+
+	updateTitle: function (title) {
+	  return _updateTitle(title);
+	},
+
+  addArea: function (name, highCost, lowCost) {
+	  return _addArea(name, highCost, lowCost);
+	},
+
+	removeArea : function (area) {
+	  return _removeArea(area);
+	},
+
+  updateArea: function (areaId, item) {
+    _addArea[areaId] = item;
   },
 
-
-  // Allow Controller-View to register itself with store
-  addChangeListener: function(callback) {
-    this.on(CostsConstants.CHANGE_EVENT, callback);
-  },
-  removeChangeListener: function(callback) {
-    this.removeListener(CostsConstants.CHANGE_EVENT, callback);
-  },
-  // triggers change listener above, firing controller-view callback
-  emitChange: function() {
-    this.emit(CostsConstants.CHANGE_EVENT);
-  },
-
-
-  // register store with dispatcher, allowing actions to flow through
-  dispatcherIndex: CostsDispatcher.register(function(payload) {
-    var action = payload.action;
-
-    switch(action.actionType) {
-      case CostsConstants.UPDATE_TITLE:
+	dispatcherIndex: AppDispatcher.register(function (payload) {
+	  var action = payload.action;
+		switch (action.actionType) {
+      case CostConstants.UPDATE_TITLE:
         var text = action.text.trim();
-        // NOTE: if this action needs to wait on another store:
-        // DataStore.waitFor([OtherStore.dispatchToken]);
-        // For details, see: http://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#why-we-need-a-dispatcher
         if (text !== '') {
-          update(text);
-          CostsStore.emitChange();
+          this.updateTitle(text);
+          CostStore.emitChange();
         }
-        break;
-        case CostsConstants.APPEND_ITEM:
+      break;
 
+      case CostStore.UPDATE_AREA:
+        this.updateArea(action.areaId, action.item);
+      break;
 
-      // add more cases for other actionTypes...
-    }
-  })
+      case CostStore.ADD_AREA:
+        this.addArea(action.name, action.highCost, action.lowCost);
+      break;
+
+      case CostStore.DELETE_AREA:
+      break;
+
+		}
+	})
 
 });
 

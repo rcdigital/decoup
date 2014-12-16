@@ -7,18 +7,16 @@ var CostsMixin = require('./CostsMixin');
 var InputLabel = React.createClass({
     mixins: [CostsMixin(), PureRenderMixin],
 
-    handleUpdateColumn : function (e) {
-      console.log(e);
-      this.props.onClick(e);
+    handleUpdateColumn : function () {
+      this.props.onClick();
     },
 
     render: function () {
         var cx = Addons.classSet;
-        console.log(!this.state.rowStyle);
         var classes = cx({
           'row': true,
           'item-row': true,
-          'js-hidden': this.state.rowStyle
+          'js-hidden': this.props.rowStyle
         });
         return (
             <div className = {classes} >

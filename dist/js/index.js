@@ -22536,7 +22536,7 @@ var CostItem = React.createClass({displayName: 'CostItem',
     getInitialState: function () {
       return {rowStyle: false};
     },
-    updateData: function (e) {
+    updateData: function () {
       this.setState({rowStyle: true});
     },
 
@@ -22544,8 +22544,8 @@ var CostItem = React.createClass({displayName: 'CostItem',
         return (
           React.createElement("section", {className: "col-md-9 col-md-offset-1"}, 
                 React.createElement("div", null, 
-                  React.createElement(InputLabel, {onClick: this.updateData, area: this.props.area}), 
-                  React.createElement(InputForm, {area: this.props.area})
+                  React.createElement(InputLabel, {rowStyle: this.state.rowStyle, onClick: this.updateData, area: this.props.area}), 
+                  React.createElement(InputForm, {rowStyle: this.state.rowStyle, area: this.props.area})
                 )
           )
         );
@@ -22556,7 +22556,6 @@ module.exports = CostItem;
 
 },{"./InputForm":346,"./InputLabel":347,"react":338}],344:[function(require,module,exports){
 'use strict';
-
 var React = require('react');
 var Header = React.createFactory(require('../header/Header'));
 var CostsStore = require('../../stores/CostsStore');
@@ -22565,22 +22564,15 @@ var AddCost = React.createFactory(require('./AddCost'));
 var Link = require('react-router-component').Link;
 
 
-var CostsList = React.createClass({displayName: 'CostsList',
-    getInitialState: function () {
-      return this.bindColumns()
-    },
-    bindColumns: function () {
-      var items = CostsStore.getAll();
-      var rows = [];
-      for (var x=0, l = items.length; x < l; x++) {
-        rows.push(React.createElement(CostItem, {area: items[x]}));
-      }
+var items = CostItem.getAll();
+var addArea = (item) => stores.addArea(item);
 
-      return {items: rows};
+var CostsList = React.createClass({displayName: 'CostsList',
+    addArea: function () {
+      addArea(item);
     },
-    addItem: function () {
-      var newItems = this.state.items.concat([React.createElement(CostItem, null)]);
-      this.setState({items: newItems});
+    updateItem: function (item) {
+
     },
     render: function () {
       return (
@@ -22591,11 +22583,11 @@ var CostsList = React.createClass({displayName: 'CostsList',
                 React.createElement(Link, {className: "btn btn-default header-link-default", href: "/"}, "voltar")
               ), 
               React.createElement("h2", {className: "col-md-8 main-menu"}, "Custo x Hora"), 
-              React.createElement(AddCost, {onClick: this.addItem})
+              React.createElement(AddCost, {onClick: this.addArea})
             )
           ), 
           React.createElement("section", {id: "row-stage", className: "table table-hover"}, 
-            this.state.items
+            React.createElement(CostItem, {area: items[x]})
           )
         )
       );
@@ -22659,7 +22651,7 @@ var InputForm = React.createClass({displayName: 'InputForm',
         var classes = cx({
           'form-horizontal': true,
           'item-row': true,
-          'js-hidden': !this.state.rowStyle
+          'js-hidden': !this.props.rowStyle
         });
         return (
             React.createElement("form", {onSubmit: this.saveData, index: this.props.area.id, className: classes, role: "form"}, 
@@ -22703,18 +22695,16 @@ var CostsMixin = require('./CostsMixin');
 var InputLabel = React.createClass({displayName: 'InputLabel',
     mixins: [CostsMixin(), PureRenderMixin],
 
-    handleUpdateColumn : function (e) {
-      console.log(e);
-      this.props.onClick(e);
+    handleUpdateColumn : function () {
+      this.props.onClick();
     },
 
     render: function () {
         var cx = Addons.classSet;
-        console.log(!this.state.rowStyle);
         var classes = cx({
           'row': true,
           'item-row': true,
-          'js-hidden': this.state.rowStyle
+          'js-hidden': this.props.rowStyle
         });
         return (
             React.createElement("div", {className: classes}, 
@@ -22758,6 +22748,7 @@ module.exports = {
   ActionTypes: keyMirror({
     UPDATE_TITLE: null,
     APPEND_ITEM: null,
+    UPDATE_COLUMN: null,
     RECEIVE_DATA: null
   }),
 
@@ -22804,10 +22795,11 @@ var React = require('react'),
 React.render(React.createFactory(App)(),  document.getElementById('main'));
 
 },{"./components/app":341,"react":338}],352:[function(require,module,exports){
+'use strict';
 var CostsDispatcher = require('../dispatchers/CostsDispatcher');
 var EventEmitter = require('events').EventEmitter;
-var CostsConstants = require('../constants/CostsConstants');
 var merge = require('react/lib/merge');
+var CHANGE_EVENT = 'change';
 
 var _data = {
   title: null
@@ -22826,56 +22818,33 @@ for (var i=1; i < 10; i++) {
 
 
 // add private functions to modify data
-function update(title) {
+function _updateTitle(title) {
   _data.title = title;
 }
 
+function _updateArea(item) {
+  _areas[item.id] = item;
+}
 
-var CostsStore = merge(EventEmitter.prototype, {
+function _addArea(name, highCost, lowCost) {}
 
-  // public methods used by Controller-View to operate on data
-  getAll: function() {
-    return _areas;
-  },
-
-
-  // Allow Controller-View to register itself with store
-  addChangeListener: function(callback) {
-    this.on(CostsConstants.CHANGE_EVENT, callback);
-  },
-  removeChangeListener: function(callback) {
-    this.removeListener(CostsConstants.CHANGE_EVENT, callback);
-  },
-  // triggers change listener above, firing controller-view callback
-  emitChange: function() {
-    this.emit(CostsConstants.CHANGE_EVENT);
-  },
+function _addManyAreas(range) {}
 
 
-  // register store with dispatcher, allowing actions to flow through
-  dispatcherIndex: CostsDispatcher.register(function(payload) {
-    var action = payload.action;
+var CostStore = merge(EventEmitter.prototype, {
+	emitChange: function () {
+		this.emit(CHANGE_EVENT);
+	},
 
-    switch(action.actionType) {
-      case CostsConstants.UPDATE_TITLE:
-        var text = action.text.trim();
-        // NOTE: if this action needs to wait on another store:
-        // DataStore.waitFor([OtherStore.dispatchToken]);
-        // For details, see: http://facebook.github.io/react/blog/2014/07/30/flux-actions-and-the-dispatcher.html#why-we-need-a-dispatcher
-        if (text !== '') {
-          update(text);
-          CostsStore.emitChange();
-        }
-        break;
-        case CostsConstants.APPEND_ITEM:
+	addChangeListener: function (callback) {
+		this.on(CHANGE_EVENT, callback);
+	},
 
-
-      // add more cases for other actionTypes...
-    }
-  })
-
+	removeChangeListener: function (callback) {
+		this.removeListener(CHANGE_EVENT, callback);
+	},
 });
 
 module.exports = CostsStore;
 
-},{"../constants/CostsConstants":349,"../dispatchers/CostsDispatcher":350,"events":4,"react/lib/merge":326}]},{},[351])
+},{"../dispatchers/CostsDispatcher":350,"events":4,"react/lib/merge":326}]},{},[351])

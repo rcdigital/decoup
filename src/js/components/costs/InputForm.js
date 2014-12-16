@@ -17,7 +17,7 @@ var InputForm = React.createClass({
         var classes = cx({
           'form-horizontal': true,
           'item-row': true,
-          'js-hidden': !this.state.rowStyle
+          'js-hidden': !this.props.rowStyle
         });
         return (
             <form onSubmit={this.saveData} index={this.props.area.id} className={classes} role="form">
