@@ -27,7 +27,7 @@ function _updateArea(item) {
   _areas[item.id] = item;
 }
 
-function _removeArea(areaId) {
+function _delelteArea(areaId) {
   delete _areas[areaId];
 }
 
@@ -52,12 +52,12 @@ var CostStore = merge(EventEmitter.prototype, {
 	  return _addArea(name, highCost, lowCost);
 	},
 
-	removeArea : function (area) {
-	  return _removeArea(area);
+	deleteArea : function (areaId) {
+	  return _deleteArea(areaId);
 	},
 
   updateArea: function (areaId, item) {
-    _addArea[areaId] = item;
+    return _addArea[areaId] = item;
   },
 
 	dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -73,13 +73,17 @@ var CostStore = merge(EventEmitter.prototype, {
 
       case CostStore.UPDATE_AREA:
         this.updateArea(action.areaId, action.item);
+        CostStore.emitChange();
       break;
 
       case CostStore.ADD_AREA:
         this.addArea(action.name, action.highCost, action.lowCost);
+        CostStore.emitChange();
       break;
 
       case CostStore.DELETE_AREA:
+        this.removeArea(areaId);
+        CostStore.emitChange();
       break;
 
 		}

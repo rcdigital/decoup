@@ -20,7 +20,14 @@ module.exports = {
     });
   },
 
-  addArea: function () {
+  deleteArea: function(areaId) {
+    CostsDispatcher.handleViewAction({
+      type: CostsConstants.ActionTypes.DELETE_AREA,
+      areaId: areaId
+    });
+  },
+
+  addArea: function (name, highCost, lowCost) {
     CostsDispatcher.handleViewAction({
       type: CostsConstants.ActionTypes.ADD_AREA,
       name: name,

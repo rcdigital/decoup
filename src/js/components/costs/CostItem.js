@@ -15,8 +15,8 @@ var CostItem = React.createClass({
         return (
           <section className="col-md-9 col-md-offset-1">
                 <div>
-                  <InputLabel rowStyle={this.state.rowStyle} onClick={this.updateData} area= {this.props.area} />
-                  <InputForm rowStyle={this.state.rowStyle} area= {this.props.area} />
+                  <InputLabel rowStyle={this.state.rowStyle} onClick={this.updateData} name= {this.props.name} highCost= {this.props.highCost} lowCost = {this.props.lowCost} />
+                  <InputForm rowStyle={this.state.rowStyle} name= {this.props.area.name} highCost= {this.props.area.highCost} lowCost = {this.props.area.lowCost} />
                 </div>
           </section>
         );

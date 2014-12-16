@@ -8,16 +8,25 @@ var Link = require('react-router-component').Link;
 
 
 var items = CostItem.getAll();
-var addArea = (item) => stores.addArea(item);
+var addArea = (name, highCost, lowCost) => stores.addArea(name, highCost, lowCost);
+
+function generateManyAreas(range) {
+  for (var x = 1; x < range; x++) {
+    addArea('Area '+ x, x * 2, x);
+  }
+}
+
+generateManyAreas(10);
 
 var CostsList = React.createClass({
     addArea: function () {
       addArea(item);
     },
-    updateItem: function (item) {
+    updateItem: function (itemId, item) {
 
     },
     render: function () {
+      var areas = CostsList.getAll();
       return (
         <section className = "container options-container">
           <Header>
@@ -30,7 +39,9 @@ var CostsList = React.createClass({
             </div>
           </Header>
           <section id="row-stage" className="table table-hover">
-            <CostItem area={items[x]} />
+            {areas.map((area) => {
+              return <CostItem area={area} />
+            })}
           </section>
         </section>
       );
