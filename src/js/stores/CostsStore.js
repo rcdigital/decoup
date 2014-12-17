@@ -3,7 +3,7 @@ var CostsDispatcher = require('../dispatchers/CostsDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var merge = require('react/lib/merge');
 
-var CostsConstants = require('../constants/CostConstants');
+var CostsConstants = require('../constants/CostsConstants');
 var CHANGE_EVENT = 'change';
 
 var _data = {

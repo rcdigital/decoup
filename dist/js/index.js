@@ -22544,8 +22544,8 @@ var CostItem = React.createClass({displayName: 'CostItem',
         return (
           React.createElement("section", {className: "col-md-9 col-md-offset-1"}, 
                 React.createElement("div", null, 
-                  React.createElement(InputLabel, {rowStyle: this.state.rowStyle, onClick: this.updateData, area: this.props.area}), 
-                  React.createElement(InputForm, {rowStyle: this.state.rowStyle, area: this.props.area})
+                  React.createElement(InputLabel, {rowStyle: this.state.rowStyle, onClick: this.updateData, name: this.props.name, highCost: this.props.highCost, lowCost: this.props.lowCost}), 
+                  React.createElement(InputForm, {rowStyle: this.state.rowStyle, name: this.props.area.name, highCost: this.props.area.highCost, lowCost: this.props.area.lowCost})
                 )
           )
         );
@@ -22565,16 +22565,28 @@ var Link = require('react-router-component').Link;
 
 
 var items = CostItem.getAll();
-var addArea = (item) => stores.addArea(item);
+
+function addArea (name, highCost, lowCost) {
+  stores.addArea(name, highCost, lowCost);
+}
+
+function generateManyAreas(range) {
+  for (var x = 1; x < range; x++) {
+    addArea('Area '+ x, x * 2, x);
+  }
+}
+
+generateManyAreas(10);
 
 var CostsList = React.createClass({displayName: 'CostsList',
     addArea: function () {
       addArea(item);
     },
-    updateItem: function (item) {
+    updateItem: function (itemId, item) {
 
     },
     render: function () {
+      var areas = CostsList.getAll();
       return (
         React.createElement("section", {className: "container options-container"}, 
           React.createElement(Header, null, 
@@ -22587,7 +22599,9 @@ var CostsList = React.createClass({displayName: 'CostsList',
             )
           ), 
           React.createElement("section", {id: "row-stage", className: "table table-hover"}, 
-            React.createElement(CostItem, {area: items[x]})
+            areas.map((area) => {
+              return React.createElement(CostItem, {area: area})
+            })
           )
         )
       );
@@ -22747,8 +22761,9 @@ module.exports = {
 
   ActionTypes: keyMirror({
     UPDATE_TITLE: null,
-    APPEND_ITEM: null,
-    UPDATE_COLUMN: null,
+    ADD_AREA: null,
+    UPDATE_AREA: null,
+    DELETE_AREA: null,
     RECEIVE_DATA: null
   }),
 
@@ -22799,6 +22814,8 @@ React.render(React.createFactory(App)(),  document.getElementById('main'));
 var CostsDispatcher = require('../dispatchers/CostsDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var merge = require('react/lib/merge');
+
+var CostsConstants = require('../constants/CostsConstants');
 var CHANGE_EVENT = 'change';
 
 var _data = {
@@ -22806,30 +22823,25 @@ var _data = {
 };
 
 var _areas = [];
-
-for (var i=1; i < 10; i++) {
-	_areas.push({
-		'id':  i,
-		'name': 'area ' + i,
-		'highCost': i * 2,
-		'lowCost': i
-	});
-}
-
+var id = 1;
 
 // add private functions to modify data
 function _updateTitle(title) {
   _data.title = title;
 }
 
+function _addArea(name, highCost, lowCost) {
+  var item = { id : ++id, name: name, lowCost: lowCost, highCost: highCost};
+  _areas.push(item);
+}
+
 function _updateArea(item) {
   _areas[item.id] = item;
 }
 
-function _addArea(name, highCost, lowCost) {}
-
-function _addManyAreas(range) {}
-
+function _delelteArea(areaId) {
+  delete _areas[areaId];
+}
 
 var CostStore = merge(EventEmitter.prototype, {
 	emitChange: function () {
@@ -22843,8 +22855,54 @@ var CostStore = merge(EventEmitter.prototype, {
 	removeChangeListener: function (callback) {
 		this.removeListener(CHANGE_EVENT, callback);
 	},
+
+	updateTitle: function (title) {
+	  return _updateTitle(title);
+	},
+
+  addArea: function (name, highCost, lowCost) {
+	  return _addArea(name, highCost, lowCost);
+	},
+
+	deleteArea : function (areaId) {
+	  return _deleteArea(areaId);
+	},
+
+  updateArea: function (areaId, item) {
+    return _addArea[areaId] = item;
+  },
+
+	dispatcherIndex: AppDispatcher.register(function (payload) {
+	  var action = payload.action;
+		switch (action.actionType) {
+      case CostConstants.UPDATE_TITLE:
+        var text = action.text.trim();
+        if (text !== '') {
+          this.updateTitle(text);
+          CostStore.emitChange();
+        }
+      break;
+
+      case CostStore.UPDATE_AREA:
+        this.updateArea(action.areaId, action.item);
+        CostStore.emitChange();
+      break;
+
+      case CostStore.ADD_AREA:
+        this.addArea(action.name, action.highCost, action.lowCost);
+        CostStore.emitChange();
+      break;
+
+      case CostStore.DELETE_AREA:
+        this.removeArea(areaId);
+        CostStore.emitChange();
+      break;
+
+		}
+	})
+
 });
 
 module.exports = CostsStore;
 
-},{"../dispatchers/CostsDispatcher":350,"events":4,"react/lib/merge":326}]},{},[351])
+},{"../constants/CostsConstants":349,"../dispatchers/CostsDispatcher":350,"events":4,"react/lib/merge":326}]},{},[351])

@@ -8,7 +8,10 @@ var Link = require('react-router-component').Link;
 
 
 var items = CostItem.getAll();
-var addArea = (name, highCost, lowCost) => stores.addArea(name, highCost, lowCost);
+
+function addArea (name, highCost, lowCost) {
+  stores.addArea(name, highCost, lowCost);
+}
 
 function generateManyAreas(range) {
   for (var x = 1; x < range; x++) {
