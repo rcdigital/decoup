@@ -20,9 +20,9 @@ var InputLabel = React.createClass({
         });
         return (
             <div className = {classes} >
-              <span className="col-xs-6 no-left-padding">{this.props.area.name}</span>
-              <span className="col-xs-2 no-left-padding">{this.props.area.highCost}</span>
-              <span className="col-xs-2 no-left-padding">{this.props.area.lowCost}</span>
+              <span className="col-xs-6 no-left-padding">{this.props.name}</span>
+              <span className="col-xs-2 no-left-padding">{this.props.highCost}</span>
+              <span className="col-xs-2 no-left-padding">{this.props.lowCost}</span>
 
               <div className="col-xs-2 btn-group  no-left-padding">
                 <button type="button" onClick = {this.handleUpdateColumn}  className="btn btn-default input-normal glyphicon glyphicon-pencil" title="editar" ></button>

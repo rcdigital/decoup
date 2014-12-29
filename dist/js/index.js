@@ -22544,7 +22544,7 @@ var CostItem = React.createClass({displayName: 'CostItem',
         return (
           React.createElement("section", {className: "col-md-9 col-md-offset-1"}, 
                 React.createElement("div", null, 
-                  React.createElement(InputLabel, {rowStyle: this.state.rowStyle, onClick: this.updateData, name: this.props.name, highCost: this.props.highCost, lowCost: this.props.lowCost}), 
+                  React.createElement(InputLabel, {rowStyle: this.state.rowStyle, onClick: this.updateData, name: this.props.area.name, highCost: this.props.area.highCost, lowCost: this.props.area.lowCost}), 
                   React.createElement(InputForm, {rowStyle: this.state.rowStyle, name: this.props.area.name, highCost: this.props.area.highCost, lowCost: this.props.area.lowCost})
                 )
           )
@@ -22564,14 +22564,13 @@ var AddCost = React.createFactory(require('./AddCost'));
 var Link = require('react-router-component').Link;
 
 
-var items = CostItem.getAll();
 
 function addArea (name, highCost, lowCost) {
-  stores.addArea(name, highCost, lowCost);
+  CostsStore.addArea(name, highCost, lowCost);
 }
 
 function generateManyAreas(range) {
-  for (var x = 1; x < range; x++) {
+  for (var x = 1; x <= range; x++) {
     addArea('Area '+ x, x * 2, x);
   }
 }
@@ -22586,7 +22585,11 @@ var CostsList = React.createClass({displayName: 'CostsList',
 
     },
     render: function () {
-      var areas = CostsList.getAll();
+      var areas = CostsStore.getAll();
+      console.log(areas);
+      var areasItems = areas.map(function(area)  {
+            return (React.createElement(CostItem, {area: area}));
+      });
       return (
         React.createElement("section", {className: "container options-container"}, 
           React.createElement(Header, null, 
@@ -22599,9 +22602,7 @@ var CostsList = React.createClass({displayName: 'CostsList',
             )
           ), 
           React.createElement("section", {id: "row-stage", className: "table table-hover"}, 
-            areas.map((area) => {
-              return React.createElement(CostItem, {area: area})
-            })
+            areasItems
           )
         )
       );
@@ -22673,17 +22674,17 @@ var InputForm = React.createClass({displayName: 'InputForm',
 
                 React.createElement("div", {className: "col-xs-6  no-left-padding"}, 
                     React.createElement("label", {className: "sr-only"}, "Area:"), 
-                    React.createElement("input", {type: "text", refs: "area", value: this.props.area.name, onChange: this.updateData, name: "area", className: "form-control input-normal", placeholder: "Area"})
+                    React.createElement("input", {type: "text", refs: "area", value: this.props.name, onChange: this.updateData, name: "area", className: "form-control input-normal", placeholder: "Area"})
                 ), 
 
                 React.createElement("div", {className: "col-xs-2 no-left-padding"}, 
                     React.createElement("label", {className: "sr-only"}, "Maior Custo:"), 
-                    React.createElement("input", {type: "text", value: this.props.area.highCost, onChange: this.updateData, name: "highcost", className: "form-control input-normal", placeholder: "Maior Custo"})
+                    React.createElement("input", {type: "text", value: this.props.highCost, onChange: this.updateData, name: "highcost", className: "form-control input-normal", placeholder: "Maior Custo"})
                 ), 
 
                 React.createElement("div", {className: "col-xs-2 no-left-padding"}, 
                     React.createElement("label", {className: "sr-only"}, "Menor Custo:"), 
-                    React.createElement("input", {type: "text", value: this.props.area.lowCost, onChange: this.updateData, name: "lowercost", className: "form-control input-normal", placeholder: "Menor Custo"})
+                    React.createElement("input", {type: "text", value: this.props.lowCost, onChange: this.updateData, name: "lowercost", className: "form-control input-normal", placeholder: "Menor Custo"})
                 ), 
 
                 React.createElement("div", {className: "col-xs-2 btn-group  no-left-padding"}, 
@@ -22722,9 +22723,9 @@ var InputLabel = React.createClass({displayName: 'InputLabel',
         });
         return (
             React.createElement("div", {className: classes}, 
-              React.createElement("span", {className: "col-xs-6 no-left-padding"}, this.props.area.name), 
-              React.createElement("span", {className: "col-xs-2 no-left-padding"}, this.props.area.highCost), 
-              React.createElement("span", {className: "col-xs-2 no-left-padding"}, this.props.area.lowCost), 
+              React.createElement("span", {className: "col-xs-6 no-left-padding"}, this.props.name), 
+              React.createElement("span", {className: "col-xs-2 no-left-padding"}, this.props.highCost), 
+              React.createElement("span", {className: "col-xs-2 no-left-padding"}, this.props.lowCost), 
 
               React.createElement("div", {className: "col-xs-2 btn-group  no-left-padding"}, 
                 React.createElement("button", {type: "button", onClick: this.handleUpdateColumn, className: "btn btn-default input-normal glyphicon glyphicon-pencil", title: "editar"})
@@ -22843,7 +22844,7 @@ function _delelteArea(areaId) {
   delete _areas[areaId];
 }
 
-var CostStore = merge(EventEmitter.prototype, {
+var CostsStore = merge(EventEmitter.prototype, {
 	emitChange: function () {
 		this.emit(CHANGE_EVENT);
 	},
@@ -22872,7 +22873,11 @@ var CostStore = merge(EventEmitter.prototype, {
     return _addArea[areaId] = item;
   },
 
-	dispatcherIndex: AppDispatcher.register(function (payload) {
+  getAll: function () {
+    return _areas;
+  },
+
+	dispatcherIndex: CostsDispatcher.register(function (payload) {
 	  var action = payload.action;
 		switch (action.actionType) {
       case CostConstants.UPDATE_TITLE:

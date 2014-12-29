@@ -31,7 +31,7 @@ function _delelteArea(areaId) {
   delete _areas[areaId];
 }
 
-var CostStore = merge(EventEmitter.prototype, {
+var CostsStore = merge(EventEmitter.prototype, {
 	emitChange: function () {
 		this.emit(CHANGE_EVENT);
 	},
@@ -60,7 +60,11 @@ var CostStore = merge(EventEmitter.prototype, {
     return _addArea[areaId] = item;
   },
 
-	dispatcherIndex: AppDispatcher.register(function (payload) {
+  getAll: function () {
+    return _areas;
+  },
+
+	dispatcherIndex: CostsDispatcher.register(function (payload) {
 	  var action = payload.action;
 		switch (action.actionType) {
       case CostConstants.UPDATE_TITLE:

@@ -25,17 +25,17 @@ var InputForm = React.createClass({
 
                 <div className="col-xs-6  no-left-padding">
                     <label className="sr-only">Area:</label>
-                    <input type="text" refs="area" value={this.props.area.name} onChange={this.updateData} name="area" className="form-control input-normal" placeholder = "Area" />
+                    <input type="text" refs="area" value={this.props.name} onChange={this.updateData} name="area" className="form-control input-normal" placeholder = "Area" />
                 </div>
 
                 <div className="col-xs-2 no-left-padding">
                     <label className="sr-only">Maior Custo:</label>
-                    <input type="text" value={this.props.area.highCost} onChange={this.updateData} name="highcost" className="form-control input-normal" placeholder = "Maior Custo" />
+                    <input type="text" value={this.props.highCost} onChange={this.updateData} name="highcost" className="form-control input-normal" placeholder = "Maior Custo" />
                 </div>
 
                 <div className="col-xs-2 no-left-padding">
                     <label className="sr-only">Menor Custo:</label>
-                    <input type="text" value={this.props.area.lowCost} onChange={this.updateData} name="lowercost" className="form-control input-normal" placeholder = "Menor Custo" />
+                    <input type="text" value={this.props.lowCost} onChange={this.updateData} name="lowercost" className="form-control input-normal" placeholder = "Menor Custo" />
                 </div>
 
                 <div className="col-xs-2 btn-group  no-left-padding">
