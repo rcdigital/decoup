@@ -22544,8 +22544,8 @@ var CostItem = React.createClass({displayName: 'CostItem',
         return (
           React.createElement("section", {className: "col-md-9 col-md-offset-1"}, 
                 React.createElement("div", null, 
-                  React.createElement(InputLabel, {rowStyle: this.state.rowStyle, onClick: this.updateData, name: this.props.area.name, highCost: this.props.area.highCost, lowCost: this.props.area.lowCost}), 
-                  React.createElement(InputForm, {rowStyle: this.state.rowStyle, name: this.props.area.name, highCost: this.props.area.highCost, lowCost: this.props.area.lowCost})
+                  React.createElement(InputLabel, {rowStyle: this.state.rowStyle, name: this.props.area.name, highCost: this.props.area.highCost, lowCost: this.props.area.lowCost}), 
+                  React.createElement(InputForm, {onSubmit: this.updateData, rowStyle: this.state.rowStyle, name: this.props.area.name, highCost: this.props.area.highCost, lowCost: this.props.area.lowCost})
                 )
           )
         );
@@ -22660,6 +22660,10 @@ var InputForm = React.createClass({displayName: 'InputForm',
       console.log(this.props.index);
     },
 
+    submitHandler : function (e) {
+      e.preventDefault();
+    },
+
     render: function () {
         var cx = Addons.classSet;
         console.log('input form');
@@ -22674,17 +22678,17 @@ var InputForm = React.createClass({displayName: 'InputForm',
 
                 React.createElement("div", {className: "col-xs-6  no-left-padding"}, 
                     React.createElement("label", {className: "sr-only"}, "Area:"), 
-                    React.createElement("input", {type: "text", refs: "area", value: this.props.name, onChange: this.updateData, name: "area", className: "form-control input-normal", placeholder: "Area"})
+                    React.createElement("input", {type: "text", refs: "area", defaultValue: this.props.name, onChange: this.updateData, name: "area", className: "form-control input-normal", placeholder: "Area"})
                 ), 
 
                 React.createElement("div", {className: "col-xs-2 no-left-padding"}, 
                     React.createElement("label", {className: "sr-only"}, "Maior Custo:"), 
-                    React.createElement("input", {type: "text", value: this.props.highCost, onChange: this.updateData, name: "highcost", className: "form-control input-normal", placeholder: "Maior Custo"})
+                    React.createElement("input", {type: "text", defaultValue: this.props.highCost, onChange: this.updateData, name: "highcost", className: "form-control input-normal", placeholder: "Maior Custo"})
                 ), 
 
                 React.createElement("div", {className: "col-xs-2 no-left-padding"}, 
                     React.createElement("label", {className: "sr-only"}, "Menor Custo:"), 
-                    React.createElement("input", {type: "text", value: this.props.lowCost, onChange: this.updateData, name: "lowercost", className: "form-control input-normal", placeholder: "Menor Custo"})
+                    React.createElement("input", {type: "text", defaultValue: this.props.lowCost, onChange: this.updateData, name: "lowercost", className: "form-control input-normal", placeholder: "Menor Custo"})
                 ), 
 
                 React.createElement("div", {className: "col-xs-2 btn-group  no-left-padding"}, 
