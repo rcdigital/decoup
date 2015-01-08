@@ -7,12 +7,13 @@ var CostsMixin = require('./CostsMixin');
 var InputLabel = React.createClass({
     mixins: [CostsMixin(), PureRenderMixin],
 
-    handleUpdateColumn : function () {
+    handleUpdateButton : function () {
       this.props.onClick();
     },
 
     render: function () {
         var cx = Addons.classSet;
+        console.log('input label');
         var classes = cx({
           'row': true,
           'item-row': true,
@@ -25,7 +26,7 @@ var InputLabel = React.createClass({
               <span className="col-xs-2 no-left-padding">{this.props.lowCost}</span>
 
               <div className="col-xs-2 btn-group  no-left-padding">
-                <button type="button" onClick = {this.handleUpdateColumn}  className="btn btn-default input-normal glyphicon glyphicon-pencil" title="editar" ></button>
+                <button type="button" onClick = {this.handleUpdateButton}  className="btn btn-default input-normal glyphicon glyphicon-pencil" title="editar" ></button>
               </div>
             </div>
         );

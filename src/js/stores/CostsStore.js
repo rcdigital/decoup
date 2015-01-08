@@ -1,4 +1,10 @@
 'use strict';
+var _ = require('underscore');
+var areaNS = 'areas';
+var companyNS = 'companies';
+
+var find = require('./data/Find');
+
 var CostsDispatcher = require('../dispatchers/CostsDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var merge = require('react/lib/merge');
@@ -6,20 +12,21 @@ var merge = require('react/lib/merge');
 var CostsConstants = require('../constants/CostsConstants');
 var CHANGE_EVENT = 'change';
 
+var lastRef = '';
+
 var _data = {
   title: null
 };
 
 var _areas = [];
-var id = 1;
 
 // add private functions to modify data
 function _updateTitle(title) {
   _data.title = title;
 }
 
-function _addArea(name, highCost, lowCost) {
-  var item = { id : ++id, name: name, lowCost: lowCost, highCost: highCost};
+function _addArea(item, id) {
+  item.id = id;
   _areas.push(item);
 }
 
@@ -29,6 +36,12 @@ function _updateArea(item) {
 
 function _delelteArea(areaId) {
   delete _areas[areaId];
+}
+
+function _find(term) {
+  var result = _.findWhere(_areas, {id: term});
+  console.log(result);
+  return result;
 }
 
 var CostsStore = merge(EventEmitter.prototype, {

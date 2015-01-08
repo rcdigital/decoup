@@ -5,12 +5,13 @@ var CostsMixin = function () {
 
       componentWillMount: function () {
           this.setState({rowStyle : false});
-          if (this.props.area.name === '' ) {
+          if (this.props.name === '' ) {
             this.setState({rowStyle : true});
           }
       },
 
       propTypes: {
+        id: React.PropTypes.string,
         name: React.PropTypes.string,
         highCost: React.PropTypes.number,
         lowCost: React.PropTypes.number
@@ -18,14 +19,12 @@ var CostsMixin = function () {
 
       getDefaultProps: function () {
         return {
-          area: {
-            name: '',
-            highCost: '',
-            lowCost: ''
-          }
+          id:'',
+          name: '',
+          highCost: '',
+          lowCost: ''
         };
       }
-
   };
 
 };

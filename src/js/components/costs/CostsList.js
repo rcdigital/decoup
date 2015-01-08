@@ -6,20 +6,6 @@ var CostItem = React.createFactory(require('./CostItem'));
 var AddCost = React.createFactory(require('./AddCost'));
 var Link = require('react-router-component').Link;
 
-
-
-function addArea (name, highCost, lowCost) {
-  CostsStore.addArea(name, highCost, lowCost);
-}
-
-function generateManyAreas(range) {
-  for (var x = 1; x <= range; x++) {
-    addArea('Area '+ x, x * 2, x);
-  }
-}
-
-generateManyAreas(10);
-
 var CostsList = React.createClass({
     addArea: function () {
       addArea(item);
