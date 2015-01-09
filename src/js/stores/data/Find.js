@@ -3,12 +3,10 @@ var Appbase = require('../Appbase');
 var Q = require('q');
 
 
-
 var getEdges = function (nameSpace, vertex) {
     var deferred = Q.defer();
     var findRef = Appbase.ns(nameSpace).v(vertex);
     var waiting = 0;
-    var allEdgesRecieved = false;
     var listEdges = [];
 
     var edgesCallback = function(error, eRef, eSnap) {
@@ -20,29 +18,24 @@ var getEdges = function (nameSpace, vertex) {
             item.id = ref.name();
             listEdges.push(item);
             waiting -= 1;
-            console.log(waiting);
-
             if (waiting === 0) {
                 console.log('wid');
                 deferred.resolve(listEdges);
-                allEdgesRecieved = true;
-                return deferred.promise;
             }
         });
-
-
     };
-
+    console.log('teste');
     findRef.on('edge_added', edgesCallback);
-
+    return deferred.promise;
 };
 
+var getAreas = function (ns, vertex) {
+  getEdges(ns, vertex);
+  console.log('getAreas');
+  return listEdges;
+};
 
-
-console.log(getEdges);
-
-
- Q.fcall(getEdges('companies', 'rccom/rccomAreas')).then(function (res) { console.log(res); });
+getAreas('companies', 'rccom/rccomAreas');
 
 var Find = {
   getEdges: getEdges
