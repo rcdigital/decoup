@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "appbasejs": "^2.2.13",
+    "firebase": "^2.1.0",
     "q": "^1.1.2",
     "react": "^0.12.1",
     "react-router-component": "git+https://github.com/STRML/react-router-component.git#react-0.12",
